@@ -1,11 +1,17 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:clientapp/splashScreen.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
-void main() {
+import 'auth/auth.dart';
+import 'auth/user.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.white,
     statusBarBrightness: Brightness.dark,
@@ -26,14 +32,19 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context){
-    return ScreenUtilInit(
-      designSize: Size(360,800),
-      minTextAdapt: true,
-      splitScreenMode: true,
+    return StreamProvider<MyUser?>.value(
+      value:AuthService().user,
+      initialData: null,
+      catchError: (e,i) => null,
+      child: ScreenUtilInit(
+        designSize: Size(360,800),
+        minTextAdapt: true,
+        splitScreenMode: true,
 
-      builder: ()=> MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: SplashScreen(),
+        builder:(BuildContext,context )  => MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: SplashScreen(),
+        ),
       ),
     );
   }
