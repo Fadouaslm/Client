@@ -1,12 +1,14 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:clientapp/Page.dart';
+import 'package:clientapp/classe2.dart';
 import 'package:clientapp/my_flutter_app_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:clientapp/Home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:clientapp/Favoris.dart';
-import 'package:clientapp/Profile.dart';
-import 'package:clientapp/Panier.dart';
+
+import 'Panier.dart';
+
 
 class Food extends StatefulWidget {
   const Food({Key? key}) : super(key: key);
@@ -15,8 +17,6 @@ class Food extends StatefulWidget {
 }
 
 class _FoodState extends State<Food> {
-  List interfaces = [Home(), Panier(), Favoris(), Profile()];
-  int currentindex = 0;
   bool value = false;
   bool isPressed = false;
   num _counter = 1;
@@ -50,33 +50,7 @@ class _FoodState extends State<Food> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        onTap: (int index) {
-          setState(() {
-            currentindex = index;
-          });
-        },
-        currentIndex: currentindex,
-        selectedItemColor: Color(0xfff54749).withOpacity(0.7),
-        unselectedItemColor: Colors.black,
-        elevation: 0,
-        items: [
-          BottomNavigationBarItem(
-              icon: Icon(MyFlutterApp.home), label: 'Accueil'),
-          BottomNavigationBarItem(
-              icon: Icon(MyFlutterApp.cart), label: 'Panier'),
-          BottomNavigationBarItem(
-            icon: Icon(MyFlutterApp.heart),
-            label: 'Favoris',
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(
-                MyFlutterApp.user,
-              ),
-              label: 'Profil'),
-        ],
-      ),
+
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         child: Column(
@@ -438,6 +412,8 @@ class _FoodState extends State<Food> {
               height: 60.h,
               child: ElevatedButton(
                 onPressed: () {
+                  Classe2.classe=Panier();
+                  Main_Page.currentindex=1;
                   Navigator.push(
                       context, MaterialPageRoute(builder: (context) => Home()));
                 },

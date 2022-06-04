@@ -1,36 +1,16 @@
 import 'package:clientapp/client/favoris.dart';
 import 'package:clientapp/client/panier.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../auth/userdata.dart';
 
 class DatabaseService {
   final String uid ;
 
-  static String? sexe;
 
   DatabaseService( { required this.uid});
 
 
   //Collectoin reference
   final CollectionReference clientCollection = FirebaseFirestore.instance.collection('client');
-
-
-
-
-//userdata
-  Userdata _userdatasnap(DocumentSnapshot snapshot){
-
-
-    return Userdata(name: snapshot.get("nom").toString(),  phone:snapshot.get("phone").toString(),sexe:snapshot.get("sexe").toString());
-  }
-
-  Stream <Userdata> get userData{
-
-    return clientCollection.doc(uid).snapshots().map((snapshot) =>_userdatasnap(snapshot));
-  }
-
-
-
 
 
 //panier
@@ -87,14 +67,9 @@ class DatabaseService {
 
 
   changenom(String s){
-    return clientCollection.doc(uid).set({"nom":s});
+    return clientCollection.doc(uid).update({"nom":s});
   }
 
-  String sexe1(){
-    clientCollection.doc(uid).get().then((value) => sexe= value.get("sexe"));
-    sexe??="M";
-    return sexe!;
-  }
 
 }
 

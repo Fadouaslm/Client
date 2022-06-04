@@ -1,6 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:clientapp/Search.dart';
+import 'package:clientapp/Page.dart';
+import 'package:clientapp/classe1.dart';
+import 'package:clientapp/pageRestau.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -191,10 +193,12 @@ class _HomeState extends State<Home> {
                  mainAxisAlignment: MainAxisAlignment.end,
                  children: [
                    TextButton(
-                       onPressed: (){Navigator.push(
+                       onPressed: (){
+                         Classe1.classe=Accueil();
+                         Navigator.push(
                            context,
                            MaterialPageRoute(
-                               builder: (context) => Search()));},
+                               builder: (context) => Main_Page()));},
                        child: AutoSizeText(
                          "Afficher plus",
                          style: TextStyle(
