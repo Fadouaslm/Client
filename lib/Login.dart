@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:clientapp/Home.dart';
+
+import 'auth/auth.dart';
 class Login extends StatefulWidget {
 
    Login({Key? key}) : super(key: key);
@@ -69,6 +71,7 @@ class _LoginState extends State<Login> {
                                             borderRadius:
                                             BorderRadius.circular(30))),
                                     onPressed: () {
+                                      AuthService().signeInAnon();
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -352,9 +355,6 @@ class _LoginState extends State<Login> {
             print(verifictaionID);
             setState(() {
               _verificationCode = verifictaionID;
-              print("hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
-              print(verifictaionID.trim());
-              print(resendToken);
 
             });
           },
