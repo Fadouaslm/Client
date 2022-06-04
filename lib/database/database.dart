@@ -63,9 +63,25 @@ class DatabaseService {
     return clientCollection.doc(uid).collection("Panier").doc(s).set({"prix":prix,"qauntite": qauntite}) ;
   }
 
+updatUserdata(){
+    clientCollection.doc(uid).set({"nom":"new user" , "panier":0.toInt(),"favoris":0.toInt()});
+}
+  int _existpanier(DocumentSnapshot snapshot){
+    return  snapshot.get("panier").toInt();
+  }
 
+  Stream <int> get existpanier{
 
+    return clientCollection.doc(uid).snapshots().map((snapshot) => _existpanier(snapshot));
+  }
+  int _existfavoris(DocumentSnapshot snapshot){
+    return  snapshot.get("favoris").toInt();
+  }
 
+  Stream <int> get existfavoris{
+
+    return clientCollection.doc(uid).snapshots().map((snapshot) => _existfavoris(snapshot));
+  }
   changenom(String s){
     return clientCollection.doc(uid).update({"nom":s});
   }
