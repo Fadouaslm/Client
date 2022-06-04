@@ -1,4 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:clientapp/database/database.dart';
+import 'package:clientapp/wrapper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -244,7 +246,14 @@ class _LoginState extends State<Login> {
                                             onPressed: () async {
                                               code=a+b+c+d+e+f;
 
-                                              await FirebaseAuth.instance.signInWithCredential(PhoneAuthProvider.credential(verificationId: _verificationCode, smsCode: code));
+                                               UserCredential result =await FirebaseAuth.instance.signInWithCredential(PhoneAuthProvider.credential(verificationId: _verificationCode, smsCode: code));
+                                              if (result.user != null){
+                                                DatabaseService(uid: result.user!.uid).updatUserdata();
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) => Wrapper()));
+                                              }
 
                                             },
                                             child: AutoSizeText(

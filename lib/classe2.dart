@@ -1,4 +1,5 @@
-import 'package:clientapp/Panier.dart';
+
+import 'package:clientapp/wrappers/panierW.dart';
 import 'package:flutter/cupertino.dart';
 
 
@@ -9,7 +10,7 @@ class Classe2 extends StatelessWidget {
   Widget build(BuildContext context) {
 
     if (classe == null) {
-      return Panier();
+      return PanierW();
     } else {
       return classe();
     }

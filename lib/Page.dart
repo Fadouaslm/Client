@@ -1,5 +1,6 @@
 import 'package:clientapp/chackUser1.dart';
 import 'package:clientapp/classe2.dart';
+import 'package:clientapp/wrappers/favorisW.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -16,7 +17,7 @@ class Main_Page extends StatefulWidget {
 }
 
 class _Main_PageState extends State<Main_Page> {
-  List interfaces = [Classe1() , Classe2() , Favoris()  ,Wrapper2() ];
+  List interfaces = [Classe1() , Classe2() , FavorisW()  ,Wrapper2() ];
 
 
   @override

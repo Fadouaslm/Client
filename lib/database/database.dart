@@ -64,7 +64,11 @@ class DatabaseService {
   }
 
 updatUserdata(){
-    clientCollection.doc(uid).set({"nom":"new user" , "panier":0.toInt(),"favoris":0.toInt()});
+    clientCollection.doc(uid).get().then((value) {
+      if(!value.exists){
+        clientCollection.doc(uid).set({"nom":"new user" , "panier":0.toInt(),"favoris":0.toInt()});
+      }
+    });
 }
   int _existpanier(DocumentSnapshot snapshot){
     return  snapshot.get("panier").toInt();
