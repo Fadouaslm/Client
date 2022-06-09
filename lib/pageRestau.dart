@@ -7,7 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'Click_restaurant.dart';
 
 class Accueil extends StatefulWidget {
-  const Accueil({Key? key}) : super(key: key);
+  Accueil({Key? key}) : super(key: key);
 
   @override
   State<Accueil> createState() => _AccueilState();

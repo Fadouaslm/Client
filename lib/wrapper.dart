@@ -1,3 +1,4 @@
+import 'package:clientapp/Page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'Home.dart';
@@ -12,10 +13,11 @@ class Wrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<MyUser?>(context);
+
     if (user == null) {
       return OnBoarding();
     } else {
-      return Home();
+      return Main_Page();
     }
   }
 }

@@ -10,7 +10,7 @@ import 'package:clientapp/my_flutter_app_icons.dart';
 import 'classe1.dart';
 
 class Main_Page extends StatefulWidget {
-  const Main_Page({Key? key}) : super(key: key);
+  Main_Page({Key? key}) : super(key: key);
  static  int currentindex =0 ;
   @override
   State<Main_Page> createState() => _Main_PageState();

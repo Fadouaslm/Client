@@ -11,10 +11,12 @@ class Wrapper2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<MyUser?>(context);
+
     if (user!.phone == null|| user.phone=="") {
-      return Profile_Infos();
-    } else {
       return Profile();
+
+    } else {
+      return Profile_Infos();
     }
   }
 }

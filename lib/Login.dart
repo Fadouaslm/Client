@@ -248,15 +248,25 @@ class _LoginState extends State<Login> {
                                           child: ElevatedButton(
                                             onPressed: () async {
                                               code=a+b+c+d+e+f;
+                                               try{
+                                                 UserCredential result =await FirebaseAuth.instance.signInWithCredential(PhoneAuthProvider.credential(verificationId: _verificationCode, smsCode: code));
+                                                 if (result.user != null){
 
-                                               UserCredential result =await FirebaseAuth.instance.signInWithCredential(PhoneAuthProvider.credential(verificationId: _verificationCode, smsCode: code));
-                                              if (result.user != null){
-                                                DatabaseService(uid: result.user!.uid).updatUserdata();
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) => Wrapper()));
-                                              }
+                                                   DatabaseService(uid: result.user!.uid).updatUserdata();
+                                                   Navigator.pushReplacement(
+                                                       context,
+                                                       MaterialPageRoute(
+                                                           builder: (context) => Wrapper()));
+                                                 }
+                                               }catch(e){
+
+                                                   Navigator.pushReplacement(
+                                                       context,
+                                                       MaterialPageRoute(
+                                                           builder: (context) => Login()));
+
+                                               }
+
 
                                             },
                                             child: AutoSizeText(

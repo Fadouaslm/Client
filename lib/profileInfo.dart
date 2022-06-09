@@ -1,3 +1,4 @@
+import 'package:clientapp/auth/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -29,7 +30,7 @@ class _Profile_InfosState extends State<Profile_Infos> {
                 width: 360.w,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage("asset/BG.png"), fit: BoxFit.cover),
+                      image: AssetImage("images/BG.png"), fit: BoxFit.cover),
                 ),
               ),
             ),
@@ -55,9 +56,9 @@ class _Profile_InfosState extends State<Profile_Infos> {
                     height: 200.h,
                     width: 300.w,
                     margin: EdgeInsets.symmetric(horizontal: 57.w),
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage("asset/Profile.png"),
+                        image: AssetImage("images/Profile.png"),
                       ),
                     ),
                   ),
@@ -176,7 +177,9 @@ class _Profile_InfosState extends State<Profile_Infos> {
                     width: 225.w,
                     height: 55.h,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        AuthService().singeOut();
+                      },
                       child: Text(
                         'Se déconnecter',
                         style: TextStyle(

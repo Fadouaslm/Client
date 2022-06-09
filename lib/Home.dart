@@ -2,10 +2,14 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:clientapp/Page.dart';
 import 'package:clientapp/classe1.dart';
+import 'package:clientapp/database/database.dart';
 import 'package:clientapp/pageRestau.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+
+import 'auth/user.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -14,7 +18,7 @@ class Home extends StatefulWidget {
 
 
 class _HomeState extends State<Home> {
-  String User = 'user';
+  String User = '';
   int activeIndex=0;
   int activeIndex2=0;
   final Urlimages=[
@@ -32,6 +36,8 @@ class _HomeState extends State<Home> {
 
 
   Widget build(BuildContext context) {
+    final user = Provider.of<MyUser?>(context);
+    User=DatabaseService(uid:user!.uid).gatNom();
     return SafeArea(
         child: Scaffold(
             body:SingleChildScrollView(

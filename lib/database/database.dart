@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseService {
   final String uid ;
-
+   static String? nom ;
 
   DatabaseService( { required this.uid});
 
@@ -89,7 +89,11 @@ updatUserdata(){
   changenom(String s){
     return clientCollection.doc(uid).update({"nom":s});
   }
-
+  String gatNom(){
+   clientCollection.doc(uid).get().then((value) => nom=value.get("nom"));
+    nom??0;
+    return nom!;
+  }
 
 }
 

@@ -15,7 +15,7 @@ class FavorisW extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = Provider.of<MyUser?>(context);
     return StreamBuilder<int>(
-        stream: DatabaseService(uid: user!.uid).existpanier,
+        stream: DatabaseService(uid: user!.uid).existfavoris,
         builder: (context, snapshot) {
           if (snapshot.hasData){
             if (snapshot.data==0){
