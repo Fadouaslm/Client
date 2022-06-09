@@ -94,6 +94,14 @@ updatUserdata(){
     nom??0;
     return nom!;
   }
+  String _Lenom(DocumentSnapshot snapshot){
+    return  snapshot.get("nom").toString();
+  }
+
+  Stream <String> get Lenom{
+
+    return clientCollection.doc(uid).snapshots().map((snapshot) => _Lenom(snapshot));
+  }
 
 }
 
