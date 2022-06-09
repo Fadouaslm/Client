@@ -91,9 +91,11 @@ updatUserdata(){
   }
   String gatNom(){
    clientCollection.doc(uid).get().then((value) => nom=value.get("nom"));
-    nom??0;
+    nom ??= "";
+
     return nom!;
   }
+  //*******************************************************************************************
   String _Lenom(DocumentSnapshot snapshot){
     return  snapshot.get("nom").toString();
   }
@@ -102,6 +104,9 @@ updatUserdata(){
 
     return clientCollection.doc(uid).snapshots().map((snapshot) => _Lenom(snapshot));
   }
+//********************************************************************************************
+
+
 
 }
 

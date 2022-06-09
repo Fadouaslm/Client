@@ -3,6 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:clientapp/Page.dart';
 import 'package:clientapp/classe1.dart';
 import 'package:clientapp/database/database.dart';
+import 'package:clientapp/database/restdata.dart';
 import 'package:clientapp/pageRestau.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -21,17 +22,12 @@ class _HomeState extends State<Home> {
   String User = '';
   int activeIndex=0;
   int activeIndex2=0;
-  final Urlimages=[
-    'images/promotakos.jpg',
-    'images/promopizza.jpg',
-    'images/promoburgur1.png',
-    'images/oussss.png',
+  var Urlimages=[
+
+    'https://firebasestorage.googleapis.com/v0/b/projet-8522f.appspot.com/o/Promotion%2Foussss.png?alt=media&token=ae9f7052-0571-45be-ba73-57d3ad787e8f',
   ];
-  final UrlRestaurants=[
-    'images/Damis.jpg',
-    'images/LePrivé .jpg',
-    'images/LePrivé 2.jpg',
-    'images/Otacos.jpg',
+  var UrlRestaurants=[
+
   ];
 
 
@@ -130,101 +126,122 @@ class _HomeState extends State<Home> {
               )
           ],
         ),
-      SizedBox(height: 20.h,),
+               SizedBox(height: 20.h,),
                   Center(
-                    child: Column(
-                      children: [
-                        CarouselSlider.builder(
-                            itemCount: Urlimages.length,
-                            itemBuilder:(context,index,realIndex){
-                              final urlImage=Urlimages[index];
-                              return buildImage(urlImage, index);
-                              } ,
-                            options: CarouselOptions(
-                                height: 160.h,
-                                autoPlay: true,
-                                autoPlayInterval: Duration(seconds: 4),
-                              enlargeCenterPage: true,
-                              pageSnapping: false,
-                              onPageChanged: (index,reason)=>
-                                  setState(()=>activeIndex=index)
-                            )
-                        ),
-                        SizedBox(height: 20.h,),
-                        buildIndicator(),
-                      ],
+                    child: StreamBuilder<List<String>?>(
+                      stream: RestauService().promotion,
+                      builder: (context, snapshot) {
+                        if(snapshot.hasData){
+
+                          Urlimages=snapshot.data!;
+                          print(Urlimages[1]);
+                        }
+                        return Column(
+                          children: [
+                            CarouselSlider.builder(
+                                itemCount: Urlimages.length,
+                                itemBuilder:(context,index,realIndex){
+                                  final urlImage=Urlimages[index];
+                                  return buildImage(urlImage, index);
+                                  } ,
+                                options: CarouselOptions(
+                                    height: 160.h,
+                                    autoPlay: true,
+                                    autoPlayInterval: Duration(seconds: 4),
+                                  enlargeCenterPage: true,
+                                  pageSnapping: false,
+                                  onPageChanged: (index,reason)=>
+                                      setState(()=>activeIndex=index)
+                                )
+                            ),
+                            SizedBox(height: 20.h,),
+                            buildIndicator(),
+                          ],
+                        );
+                      }
                     ),
                   ),
                 ],
               ),
                   SizedBox(height: 30.h,),
-      Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-              height: 30.h,
-          ),
-          Row(
-              children: [
-                SizedBox(
-                  width: 20.w,
-                ),
-                AutoSizeText(
-                  'Restaurant :',
-                  style: TextStyle(
-                      fontSize: 20.sp,
-                      fontFamily: 'ines',
-                      fontWeight: FontWeight.bold),
-                ),
-              ],
-          ),
-                  SizedBox(height: 26.h,),
-                  Row(
-                    children: [SizedBox(width: 10.w,),
-                      Container(
-                        height: 150.h,
-                        width: 350.w,
-                        child: ListView.separated(
-                          physics: BouncingScrollPhysics(),
-                          scrollDirection: Axis.horizontal,
-                          itemCount:UrlRestaurants.length,
-                          separatorBuilder:(context,_)=>SizedBox(width: 0.w,),
-                          itemBuilder: (context,index)=>buildRestaurant(UrlRestaurants[index])
-                         )
-                        ),
-                    ],
-                  ),
-               Row(
-                 mainAxisAlignment: MainAxisAlignment.end,
-                 children: [
-                   TextButton(
-                       onPressed: (){
-                         Classe1.classe=Accueil();
-                         Navigator.push(
-                           context,
-                           MaterialPageRoute(
-                               builder: (context) => Main_Page()));},
-                       child: AutoSizeText(
-                         "Afficher plus",
-                         style: TextStyle(
-                           color: Colors.black,
-                         //  fontWeight: FontWeight.bold,
-                           fontSize: 14.sp,
-                           decoration:TextDecoration.underline,
-                          ),
-                         ),
-                       ),
-                   Icon(
-                     Icons.arrow_forward,
-                     color: Colors.black,
-                     size: 15.sp,
-
+              StreamBuilder<List<String>>(
+                stream: RestauService().sugestion,
+                builder: (context, snapshot) {
+                  int nombre=0;
+                  if(snapshot.hasData){
+                    UrlRestaurants=snapshot.data!;
+                     nombre =UrlRestaurants.length;
+                    if(nombre>5){nombre=5;}
+                  }
+                  return Column(
+                   mainAxisAlignment: MainAxisAlignment.start,
+                   crossAxisAlignment: CrossAxisAlignment.start,
+                   children: [
+                   SizedBox(
+                  height: 30.h,
                    ),
-                   SizedBox(width: 5.w,),
-                 ],
-               )
-                ],
+                   Row(
+                    children: [
+                    SizedBox(
+                      width: 20.w,
+                    ),
+                    AutoSizeText(
+                      'Restaurant :',
+                      style: TextStyle(
+                          fontSize: 20.sp,
+                          fontFamily: 'ines',
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+          ),
+                      SizedBox(height: 26.h,),
+                      Row(
+                        children: [SizedBox(width: 10.w,),
+                          Container(
+                            height: 150.h,
+                            width: 350.w,
+                            child: ListView.separated(
+                              physics: BouncingScrollPhysics(),
+                              scrollDirection: Axis.horizontal,
+                              itemCount:nombre,
+                              separatorBuilder:(context,_)=>SizedBox(width: 0.w,),
+                              itemBuilder: (context,index)=>buildRestaurant(UrlRestaurants[index])
+                             )
+                            ),
+                        ],
+                      ),
+                   Row(
+                     mainAxisAlignment: MainAxisAlignment.end,
+                     children: [
+                       TextButton(
+                           onPressed: (){
+                             Classe1.classe=Accueil();
+                             Navigator.push(
+                               context,
+                               MaterialPageRoute(
+                                   builder: (context) => Main_Page()));},
+                           child: AutoSizeText(
+                             "Afficher plus",
+                             style: TextStyle(
+                               color: Colors.black,
+                             //  fontWeight: FontWeight.bold,
+                               fontSize: 14.sp,
+                               decoration:TextDecoration.underline,
+                              ),
+                             ),
+                           ),
+                       Icon(
+                         Icons.arrow_forward,
+                         color: Colors.black,
+                         size: 15.sp,
+
+                       ),
+                       SizedBox(width: 5.w,),
+                     ],
+                   )
+                    ],
+                  );
+                }
               ),
            ]
           ),
@@ -239,7 +256,7 @@ class _HomeState extends State<Home> {
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(15.r),
         image: DecorationImage(
-          image: AssetImage(Urlimage),
+          image: NetworkImage(Urlimage),
           fit: BoxFit.cover,
         )
     ),
@@ -253,7 +270,7 @@ class _HomeState extends State<Home> {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15.r),
             image: DecorationImage(
-              image: AssetImage(urlRestaurant),
+              image: NetworkImage(urlRestaurant),
               fit: BoxFit.cover,
             )
         ),
