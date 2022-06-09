@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:clientapp/Page.dart';
+import 'package:clientapp/classe1.dart';
 import 'package:clientapp/classe2.dart';
 import 'package:clientapp/my_flutter_app_icons.dart';
 import 'package:flutter/cupertino.dart';
@@ -413,9 +414,10 @@ class _FoodState extends State<Food> {
               child: ElevatedButton(
                 onPressed: () {
                   Classe2.classe=Panier();
+                  Classe1.classe=Home();
                   Main_Page.currentindex=1;
                   Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => Home()));
+                      context, MaterialPageRoute(builder: (context) => Main_Page()));
                 },
                 child: AutoSizeText(
                   'Ajouter au panier',

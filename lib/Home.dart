@@ -134,14 +134,13 @@ class _HomeState extends State<Home> {
                         if(snapshot.hasData){
 
                           Urlimages=snapshot.data!;
-                          print(Urlimages[1]);
                         }
                         return Column(
                           children: [
                             CarouselSlider.builder(
                                 itemCount: Urlimages.length,
                                 itemBuilder:(context,index,realIndex){
-                                  final urlImage=Urlimages[index];
+                                  String urlImage=Urlimages[index];
                                   return buildImage(urlImage, index);
                                   } ,
                                 options: CarouselOptions(

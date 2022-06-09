@@ -12,7 +12,7 @@ class Classe2 extends StatelessWidget {
     if (classe == null) {
       return PanierW();
     } else {
-      return classe();
+      return classe;
     }
   }
 }

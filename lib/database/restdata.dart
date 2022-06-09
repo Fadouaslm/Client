@@ -1,3 +1,4 @@
+import 'package:clientapp/restaurant/restaurant.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RestauService {
@@ -31,6 +32,23 @@ class RestauService {
   }
   Stream<List <String>> get promotion {
     return FirebaseFirestore.instance.collection('Promotion').snapshots().map((snapshot)=> _promotion(snapshot));
+
+  }
+
+
+  List <Restaurant> _restaurantList(QuerySnapshot snapshot ){
+
+    return snapshot.docs.map((doc)
+    {
+
+      return Restaurant(nom: doc.get("nom").toString(), longitude: doc.get("longitude").toDouble(), imageUrl: doc.get("ImageUrl").toString(), latitude:doc.get("latitude").toDouble(), id: doc.get("ID").toString(), phone: doc.get("phone").toString());
+
+
+    }).toList();
+
+  }
+  Stream<List <Restaurant>> get restaurantList {
+    return restauCollection.snapshots().map((snapshot)=> _restaurantList(snapshot));
 
   }
 }

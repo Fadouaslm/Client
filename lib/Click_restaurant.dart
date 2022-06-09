@@ -5,9 +5,9 @@ import 'Food.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 class Click_restaurant extends StatefulWidget {
-  final restaurant_pic ;
-  final restaurant_name ;
-  const Click_restaurant({Key? key, required this.restaurant_pic,required this.restaurant_name}) : super(key: key);
+
+  final restaurant_id ;
+  const Click_restaurant({Key? key,required this.restaurant_id}) : super(key: key);
 
   @override
   State<Click_restaurant> createState() => _Click_restaurantState();
@@ -107,7 +107,7 @@ class _Click_restaurantState extends State<Click_restaurant> {
                             height: 190.h,
                             width: 225.w,
                             child: Image.asset(
-                              widget.restaurant_pic,
+                              "asset/burgerp.png",////////////////////////////////////////////
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -135,7 +135,7 @@ class _Click_restaurantState extends State<Click_restaurant> {
                           borderRadius: BorderRadius.circular(18.sp),
                         ),
                         child: AutoSizeText(
-                          " ${widget.restaurant_name} ",
+                          " ${widget.restaurant_id} ",
                           style: TextStyle(
                             fontSize: 19.sp,
                             color: Colors.black,
