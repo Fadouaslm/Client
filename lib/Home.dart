@@ -248,7 +248,9 @@ class _HomeState extends State<Home> {
        )
       );
   }
-  Widget buildImage(String Urlimage,int index)=>Container(
+  Widget buildImage(String Urlimage,int index) {
+
+  return Container(
     //height:40.h,
     //width: 340.w,
     margin: EdgeInsets.symmetric(horizontal: 4),
@@ -259,7 +261,7 @@ class _HomeState extends State<Home> {
           fit: BoxFit.cover,
         )
     ),
-  );
+  );}
   Widget buildRestaurant(String urlRestaurant)=>Row(
     children: [
       SizedBox(width: 10.h,),

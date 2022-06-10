@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:clientapp/client/favoris.dart';
 import 'package:clientapp/client/panier.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

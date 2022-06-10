@@ -129,7 +129,7 @@ class _AccueilState extends State<Accueil> {
                                                 width: 84.h,
                                                 child: ElevatedButton(
                                                     onPressed: () {
-                                                      Classe1.classe= Click_restaurant(restaurant_id: restaurant[index].id, );
+                                                      Classe1.classe= Click_restaurant(restaurant_id: restaurant[index].id,image: url,name: nom, );
                                                       Navigator.push(
                                                           context,
                                                           MaterialPageRoute(
