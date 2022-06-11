@@ -3,10 +3,10 @@ import 'package:clientapp/restaurant/restaurant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'Food.dart';
 import 'Page.dart';
 import 'classe1.dart';
+
 
 class Catego extends StatefulWidget {
   final String restaurant_id,categorie;
@@ -22,15 +22,18 @@ class _CategoState extends State<Catego> {
   List<Plat> plats=[];
   @override
   Widget build(BuildContext context) {
-    plasImage=RestauService().getfoodImage(widget.categorie);
-    plasImage=RestauService().getfoodImage(widget.categorie);
+
+    plasImage=RestauService().getplatImage(widget.categorie) ;
+    foodImage=RestauService().getfoodImage(widget.categorie);
+
     return   StreamBuilder<List<Plat>>(
       stream: RestauService().categoreList(widget.restaurant_id, widget.categorie),
       builder: (context, snapshot) {
 
         if (snapshot.hasData){
           plats =snapshot.data!;
-
+          foodImage=RestauService().getfoodImage(widget.categorie);
+          print(foodImage);
 return ListView.builder(
     physics: BouncingScrollPhysics(),
     itemCount: plats.length,
@@ -38,9 +41,11 @@ return ListView.builder(
 
       final String nom = plats[index].nom;
       final int prix = plats[index].prix;
+
+
       return GestureDetector(
         onTap: () {
-          Classe1.classe=Food();
+          Classe1.classe=Food(plat: plats[index],);
 
           Navigator.push(
               context,

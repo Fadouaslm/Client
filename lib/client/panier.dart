@@ -1,7 +1,5 @@
 class Panier{
- final String nom;
- final int prix;
-  int quentite;
-  final String nomRest;
-  Panier({required this.nom,required this.nomRest,required this.prix, required this.quentite});
+ final String id, resId,descreption,nom,categore;
+ final int prix,quantite;
+ Panier({required this.id,required this.nom,required this.resId,required this.descreption,required this.prix,required this.categore,required this.quantite});
 }

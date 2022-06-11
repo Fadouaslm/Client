@@ -1,12 +1,14 @@
-import 'dart:ffi';
 
-import 'package:clientapp/client/favoris.dart';
 import 'package:clientapp/client/panier.dart';
+
+import 'package:clientapp/restaurant/restaurant.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseService {
   final String uid ;
    static String? nom ;
+   static bool exist=false ;
+   static int nbrPanier =0,nbrFavoris=0;
 
   DatabaseService( { required this.uid});
 
@@ -21,8 +23,7 @@ class DatabaseService {
     return snapshot.docs.map((doc)
     {
 
-      return Panier(nom: doc.get("nom")??"", prix: doc.get("prix")??0,nomRest:doc.get("nomRestarant")??'' ,quentite:doc.get("quentite")??'');
-
+return Panier(id: doc.get("ID").toString(), nom: doc.get("nom").toString(), resId: doc.get("ResId").toString(), descreption:doc.get("description").toString(), prix: doc.get("prix").toInt(), categore: doc.get("categorie").toString(), quantite: doc.get("quentite").toInt());
 
     }).toList();
 
@@ -31,39 +32,23 @@ class DatabaseService {
     return clientCollection.doc(uid).collection("Panier").snapshots().map((snapshot)=> _panierList(snapshot));
 
   }
-  List <Favoris> _favorisList(QuerySnapshot snapshot ){
+  List <Plat> _favorisList(QuerySnapshot snapshot ){
 
     return snapshot.docs.map((doc)
     {
 
-      return Favoris(nomPlat: doc.get("nomPlats")??"",nomRest:doc.get("nomRestarant")??"",cate:doc.get("categorer")??"" );
-
+      return Plat(id: doc.get("ID").toString(), nom: doc.get("nom").toString(), resId: doc.get("ResId").toString(), descreption:doc.get("description").toString(), prix: doc.get("prix").toInt(), categore: doc.get("categorie").toString());
 
     }).toList();
 
   }
-  Stream<List <Favoris>> get favoris {
+  Stream<List <Plat>> get favoris {
     return clientCollection.doc(uid).collection("favoris").snapshots().map((snapshot)=> _favorisList(snapshot));
 
   }
 
 
-  Future deletePanier(String nomplat,String nomRes)async {
 
-    return
-      clientCollection.doc(uid).collection("panier").doc(nomplat+nomRes).delete();
-  }
-  Future deleteFavoris(String nomplat,String nomRes)async {
-
-    return
-      clientCollection.doc(uid).collection("favoris").doc(nomplat+nomRes).delete();
-  }
-  Future updateFavoris(String s,String cate){
-    return clientCollection.doc(uid).collection("Favoris").doc(s).set({"categore":cate}) ;
-  }
-  Future updatePanier(String s,int prix,int qauntite){
-    return clientCollection.doc(uid).collection("Panier").doc(s).set({"prix":prix,"qauntite": qauntite}) ;
-  }
 
 updatUserdata(){
     clientCollection.doc(uid).get().then((value) {
@@ -108,7 +93,44 @@ updatUserdata(){
   }
 //********************************************************************************************
 
+  Future updateFavoris(Plat plat)async{
+  await clientCollection.doc(uid).collection("Favoris").doc(plat.resId+""+plat.id).set({"nom":plat.nom,"description":plat.descreption,"prix":plat.prix,"ID":plat.id,"ResId":plat.resId,"categorie":plat.categore});
+  }
+ Future deletFavoris(Plat plat)async{
+    await clientCollection.doc(uid).collection("Favoris").doc(plat.resId+""+plat.id).delete();
+  }
+  Future updatePanier(Plat plat , int cont,String message)async{
+   await clientCollection.doc(uid).collection("Panier").doc(plat.resId+""+plat.id).set({"nom":plat.nom,"description":plat.descreption,"prix":plat.prix,"ID":plat.id,"ResId":plat.resId,"categorie":plat.categore,"quentite":cont.toInt(),"message":message});
+  }
+  Future deletePanier(Panier panier)async{
+    await clientCollection.doc(uid).collection("Panier").doc(panier.resId+""+panier.id).delete();
+  }
+  bool existPlat(Plat plat){
+    clientCollection.doc(uid).collection("Favoris").doc(plat.resId+""+plat.id).get().then((value) {
+     exist= value.exists;
+   }
+   );
+   return exist;
+  }
+  UpdateFavorisPlus()async{
+     await clientCollection.doc(uid).get().then((value) => nbrFavoris=value.get("favoris").toInt());
 
+    await clientCollection.doc(uid).update({"favoris":nbrFavoris+1});
+  }
+  UpdateFavorisMoin()async{
+    await clientCollection.doc(uid).get().then((value) => nbrFavoris=value.get("favoris").toInt());
 
+    await clientCollection.doc(uid).update({"favris":nbrFavoris-1});
+  }
+  UpdatePanierPlus()async{
+    await clientCollection.doc(uid).get().then((value) => nbrPanier=value.get("panier").toInt());
+
+    await clientCollection.doc(uid).update({"panier":nbrPanier+1});
+  }
+  UpdatePanierMoin()async{
+    await clientCollection.doc(uid).get().then((value) => nbrPanier=value.get("panier").toInt());
+
+    await clientCollection.doc(uid).update({"panier":nbrPanier-1});
+  }
 }
 

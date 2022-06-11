@@ -102,7 +102,7 @@ String getfoodImage(String cate){
   return foodImage;
 }
 String getplatImage(String cate){
-  FirebaseFirestore.instance.collection('Categories').doc(cate).get().then((value) => plasImage=value.get("platImage"));
+ FirebaseFirestore.instance.collection('Categories').doc(cate).get().then((value) => plasImage=value.get("platImage"));
 
   return plasImage;
 }
@@ -111,6 +111,8 @@ String nom(String id){
    restauCollection.doc(id).get().then((value) => name= value.get("nom"));
 
     return name;
-}
+
+  }
+
 
 }
