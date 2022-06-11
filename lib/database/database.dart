@@ -8,7 +8,7 @@ class DatabaseService {
   final String uid ;
    static String? nom ;
    static bool exist=false ;
-   static int nbrPanier =0,nbrFavoris=0;
+   static int nbrPanier =0,nbrFavoris=0,nbPlat=0;
 
   DatabaseService( { required this.uid});
 
@@ -43,7 +43,7 @@ return Panier(id: doc.get("ID").toString(), nom: doc.get("nom").toString(), resI
 
   }
   Stream<List <Plat>> get favoris {
-    return clientCollection.doc(uid).collection("favoris").snapshots().map((snapshot)=> _favorisList(snapshot));
+    return clientCollection.doc(uid).collection("Favoris").snapshots().map((snapshot)=> _favorisList(snapshot));
 
   }
 
@@ -131,6 +131,18 @@ updatUserdata(){
     await clientCollection.doc(uid).get().then((value) => nbrPanier=value.get("panier").toInt());
 
     await clientCollection.doc(uid).update({"panier":nbrPanier-1});
+  }
+  UpdatePlatPlus(String uid)async{
+
+    await clientCollection.doc(this.uid).collection("Panier").doc(uid).get().then((value) => nbPlat=value.get("quentite").toInt());
+
+    await clientCollection.doc(this.uid).collection("Panier").doc(uid).update({"quentite":nbPlat+1});
+  }
+  UpdatePlatMoin(String uid)async{
+    print("hello "+uid);
+    await clientCollection.doc(this.uid).collection("Panier").doc(uid).get().then((value) => nbPlat=value.get("quentite").toInt());
+
+    await clientCollection.doc(this.uid).collection("Panier").doc(uid).update({"quentite":nbPlat-1});
   }
 }
 

@@ -51,7 +51,7 @@ class _Complet_OrderState extends State<Complet_Order> {
               margin: EdgeInsets.symmetric(horizontal: 57.w),
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage("asset/Location.png"),
+                  image: AssetImage("images/Location.png"),
                 ),
               ),
             ),
