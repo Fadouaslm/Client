@@ -7,6 +7,7 @@ class DatabaseService {
   final String uid ;
    static String? nom ;
    static bool exist=false ;
+   static double? long,lat;
 static List<Panier>? list;
    static int nbrPanier =0,nbrFavoris=0,nbPlat=0;
 
@@ -157,7 +158,7 @@ return exist;
     { time = dt.hour.toString()+":"+dt.minute.toString();};
     for(int i =0;i<list!.length;i++){
 
-      await  FirebaseFirestore.instance.collection('Commandes').doc(uid+":"+time.toString()).set({"nom":list![i].nom,"description":list![i].descreption,"prix":list![i].prix,"ID":list![i].id,"ResId":list![i].resId,"categorie":list![i].categore,"quentite":list![i].quantite.toInt(),"message":list![i].message,"UserID":uid,"Latitude":l.latitude,"Longitude":l.longitude});
+      await  FirebaseFirestore.instance.collection('Commandes').doc(uid+":"+time.toString()).collection("commade").add({"nom":list![i].nom,"description":list![i].descreption,"prix":list![i].prix,"ID":list![i].id,"ResId":list![i].resId,"categorie":list![i].categore,"quentite":list![i].quantite.toInt(),"message":list![i].message,"UserID":uid,"Latitude":l.latitude,"Longitude":l.longitude});
     }
   }
 }

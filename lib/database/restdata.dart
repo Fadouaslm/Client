@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:clientapp/restaurant/restaurant.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 class RestauService {
 
@@ -69,6 +70,9 @@ final CollectionReference restauCollection = FirebaseFirestore.instance.collecti
 
     return snapshot.docs.map((doc)
     {
+      print( doc.get("nom").toString());
+      print( doc.get("prix").toString());
+      print("hi");
       return Plat(id: doc.get("ID").toString(), nom:doc.get("nom").toString(), resId: doc.get("ResID").toString(), descreption: doc.get("description").toString(), prix: doc.get("prix").toInt(), categore: doc.get("categorie").toString());
 
 

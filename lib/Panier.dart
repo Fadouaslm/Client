@@ -1,4 +1,7 @@
 import 'package:clientapp/Home.dart';
+import 'package:clientapp/Page.dart';
+import 'package:clientapp/classe1.dart';
+import 'package:clientapp/pageRestau.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -22,7 +25,8 @@ class _PanierState extends State<Panier> {
             alignment: Alignment.topLeft,
             child: GestureDetector(
               onTap: () {
-                Navigator.pop(context);
+                Classe1.classe=Accueil();
+                Main_Page.currentindex=0;
               },
               child: Icon(
                 Icons.arrow_back,

@@ -1,4 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:clientapp/Home.dart';
+import 'package:clientapp/Page.dart';
+import 'package:clientapp/classe1.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -53,7 +56,12 @@ Veuillez la collecter''',
                   width: 200.w,
                   height: 70.h,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Classe1.classe=Home();
+                      Main_Page.currentindex=0;
+                      Navigator.push(
+                          context, MaterialPageRoute(builder: (context) => Main_Page()));
+                    },
                     child: AutoSizeText(
                       "C'est parti",
                       maxLines: 1,

@@ -8,7 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 import 'Food.dart';
-import 'Home.dart';
+
 import 'auth/user.dart';
 
 class FavorisPleine extends StatefulWidget {
@@ -20,9 +20,9 @@ class FavorisPleine extends StatefulWidget {
 }
 
 class _FavorisPleineState extends State<FavorisPleine> {
-  getImage(Plat plat)async{
-    await RestauService().getplatImage(plat.categore) ;
-    await RestauService().getfoodImage(plat.categore);
+  getImage(Plat plat){
+    RestauService().getplatImage(plat.categore) ;
+    RestauService().getfoodImage(plat.categore);
   }
 
   @override

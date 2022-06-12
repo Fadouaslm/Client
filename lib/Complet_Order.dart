@@ -61,13 +61,12 @@ class _Complet_OrderState extends State<Complet_Order> {
   }
 
   getLocation() async {
-    print("///////////////////////////");
+
     position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-print("///////////////////////////");
-    print(position.longitude); //Output: 80.24599079
-    print(position.latitude); //Output: 29.6593457
 
+DatabaseService.long=position.longitude;
+DatabaseService.lat=position.latitude;
     long = position.longitude;
     lat = position.latitude;
 
@@ -86,7 +85,8 @@ print("///////////////////////////");
         .listen((Position position) {
       print(position.longitude); //Output: 80.24599079
       print(position.latitude); //Output: 29.6593457
-
+      DatabaseService.long=position.longitude;
+      DatabaseService.lat=position.latitude;
       long = position.longitude;
       lat = position.latitude;
 
@@ -199,7 +199,10 @@ print("///////////////////////////");
                   await checkGps();
                   Location location;
 
-                  location=Location(latitude: lat, longitude: long, timestamp:dt);
+                print(lat);
+                print("hawliv");
+                print(DatabaseService.lat);
+                  location=Location(latitude: DatabaseService.lat!, longitude: DatabaseService.long!, timestamp:dt);
                  List<Panier>? list=DatabaseService.list;
 
                    await DatabaseService(uid: user!.uid).writeCommande(location);

@@ -117,6 +117,7 @@ class _SearchState extends State<Search> {
                       borderRadius: BorderRadius.circular(10.r),
                     ),
                     child: TextFormField(
+
                       textAlignVertical: TextAlignVertical.center,
                       textAlign: TextAlign.left,
                       decoration: InputDecoration(

@@ -19,6 +19,7 @@ class PanierW extends StatelessWidget {
     builder: (context, snapshot) {
 
       if (snapshot.hasData){
+        print(snapshot.data);
         if (snapshot.data==0){
 
           return const Panier();
