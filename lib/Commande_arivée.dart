@@ -25,7 +25,7 @@ class _CommandeariveState extends State<Commandearive> {
                   margin: EdgeInsets.symmetric(horizontal: 57.w),
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage("asset/commande est là.png"),
+                      image: AssetImage("images/commande est là.png"),
                     ),
                   ),
                 ),

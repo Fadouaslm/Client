@@ -1,9 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:clientapp/client/panier.dart';
+import 'package:clientapp/database/database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:provider/provider.dart';
 
 import 'Commande_arrive-bientot.dart';
+import 'auth/user.dart';
 
 class Adress extends StatefulWidget {
   const Adress({Key? key}) : super(key: key);
@@ -13,8 +17,10 @@ class Adress extends StatefulWidget {
 }
 
 class _AdressState extends State<Adress> {
+  String adress="";
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<MyUser?>(context);
     return
       SafeArea(
         child: Scaffold(
@@ -82,7 +88,11 @@ class _AdressState extends State<Adress> {
                   width: 350,
                   child: Center(
                     child: TextFormField(
+                      onChanged: (value){
+                        adress=value;
+                      },
                       decoration: InputDecoration(
+
                         counterText: '',
                         contentPadding: EdgeInsets.all(10.0.h),
                         border: InputBorder.none,
@@ -113,7 +123,16 @@ class _AdressState extends State<Adress> {
                   width: 200.w,
                   height: 70.h,
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      List<Location> locations = await locationFromAddress(adress);
+
+                      List<Panier>? list=DatabaseService.list;
+
+                     await DatabaseService(uid: user!.uid).writeCommande(locations[0]);
+
+                     for(int i =0;i<list!.length;i++){
+                      DatabaseService(uid: user.uid).deletePanier(list[i]);}
+                     DatabaseService(uid: user.uid).UpdatePanierMoin();
                       Navigator.push(
                           context,
                           MaterialPageRoute(

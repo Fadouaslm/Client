@@ -52,7 +52,7 @@ class _CommandeariveBeintot extends State<CommandeariveBeintot> {
                   margin: EdgeInsets.symmetric(horizontal: 57.w),
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage("asset/Commande arrive bientot.png"),
+                      image: AssetImage("images/Commande arrive bientot.png"),
                     ),
                   ),
                 ),
@@ -61,7 +61,7 @@ class _CommandeariveBeintot extends State<CommandeariveBeintot> {
                   width: 350.w,
                   child: AutoSizeText(
                     '''votre commande arrive
-beintot.''',
+                                beintot.''',
                     maxLines: 2,
                     textAlign: TextAlign.center,
                     style: TextStyle(

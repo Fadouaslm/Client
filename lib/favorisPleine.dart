@@ -3,11 +3,11 @@ import 'package:clientapp/database/database.dart';
 import 'package:clientapp/database/restdata.dart';
 import 'package:clientapp/my_flutter_app_icons.dart';
 import 'package:clientapp/restaurant/restaurant.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
+import 'Food.dart';
 import 'Home.dart';
 import 'auth/user.dart';
 
@@ -20,9 +20,14 @@ class FavorisPleine extends StatefulWidget {
 }
 
 class _FavorisPleineState extends State<FavorisPleine> {
+  getImage(Plat plat)async{
+    await RestauService().getplatImage(plat.categore) ;
+    await RestauService().getfoodImage(plat.categore);
+  }
 
   @override
   Widget build(BuildContext context) {
+
     List<Plat> plat= [];
     final user = Provider.of<MyUser?>(context);
     return StreamBuilder<List<Plat>>(
@@ -65,16 +70,20 @@ class _FavorisPleineState extends State<FavorisPleine> {
                     physics: BouncingScrollPhysics(),
                     itemCount: plat.length,
                     itemBuilder: (BuildContext context, int index) {
-                      String plaImage=RestauService().getplatImage(plat[index].categore);
-                      String foodImage=RestauService().getfoodImage(plat[index].categore);
+
+                      getImage(plat[index]);
+                      String plaImage=RestauService.plasImage;
+                      String foodImage=RestauService.foodImage;
                       final String nom = '${plat[index].nom}';
                       final String prix =  '${plat[index].prix}.00';
                       return GestureDetector(
                         onTap: () {
+
+                          DatabaseService.exist=true;
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => Home()));/////////////////////////////////////////////////////////
+                                  builder: (context) =>Food(plat: plat[index])));/////////////////////////////////////////////////////////
                         },
                         child: Column(
                           children: [
@@ -219,7 +228,7 @@ class _FavorisPleineState extends State<FavorisPleine> {
                                       width: 110.w,
                                       decoration: BoxDecoration(
                                         image: DecorationImage(
-                                            image: NetworkImage(plaImage),
+                                            image: AssetImage(plaImage),
                                             fit: BoxFit.cover
                                         ),
                                       ),
@@ -231,7 +240,7 @@ class _FavorisPleineState extends State<FavorisPleine> {
                                       width: 105.w,
                                       decoration: BoxDecoration(
                                         image: DecorationImage(
-                                            image: NetworkImage(foodImage),
+                                            image:AssetImage(foodImage),
                                             fit: BoxFit.cover
                                         ),
                                       ),

@@ -1,13 +1,13 @@
-
 import 'package:clientapp/client/panier.dart';
-
 import 'package:clientapp/restaurant/restaurant.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geocoding/geocoding.dart';
 
 class DatabaseService {
   final String uid ;
    static String? nom ;
    static bool exist=false ;
+static List<Panier>? list;
    static int nbrPanier =0,nbrFavoris=0,nbPlat=0;
 
   DatabaseService( { required this.uid});
@@ -23,7 +23,7 @@ class DatabaseService {
     return snapshot.docs.map((doc)
     {
 
-return Panier(id: doc.get("ID").toString(), nom: doc.get("nom").toString(), resId: doc.get("ResId").toString(), descreption:doc.get("description").toString(), prix: doc.get("prix").toInt(), categore: doc.get("categorie").toString(), quantite: doc.get("quentite").toInt());
+return Panier(id: doc.get("ID").toString(), nom: doc.get("nom").toString(), resId: doc.get("ResId").toString(), descreption:doc.get("description").toString(), prix: doc.get("prix").toInt(), categore: doc.get("categorie").toString(), quantite: doc.get("quentite").toInt(),message:doc.get("message".toString()));
 
     }).toList();
 
@@ -100,17 +100,18 @@ updatUserdata(){
     await clientCollection.doc(uid).collection("Favoris").doc(plat.resId+""+plat.id).delete();
   }
   Future updatePanier(Plat plat , int cont,String message)async{
+    
    await clientCollection.doc(uid).collection("Panier").doc(plat.resId+""+plat.id).set({"nom":plat.nom,"description":plat.descreption,"prix":plat.prix,"ID":plat.id,"ResId":plat.resId,"categorie":plat.categore,"quentite":cont.toInt(),"message":message});
   }
   Future deletePanier(Panier panier)async{
     await clientCollection.doc(uid).collection("Panier").doc(panier.resId+""+panier.id).delete();
   }
-  bool existPlat(Plat plat){
-    clientCollection.doc(uid).collection("Favoris").doc(plat.resId+""+plat.id).get().then((value) {
+ Future<bool> existPlat(Plat plat)async{
+ await clientCollection.doc(uid).collection("Favoris").doc(plat.resId+""+plat.id).get().then((value) {
      exist= value.exists;
    }
    );
-   return exist;
+return exist;
   }
   UpdateFavorisPlus()async{
      await clientCollection.doc(uid).get().then((value) => nbrFavoris=value.get("favoris").toInt());
@@ -120,7 +121,7 @@ updatUserdata(){
   UpdateFavorisMoin()async{
     await clientCollection.doc(uid).get().then((value) => nbrFavoris=value.get("favoris").toInt());
 
-    await clientCollection.doc(uid).update({"favris":nbrFavoris-1});
+    await clientCollection.doc(uid).update({"favoris":nbrFavoris-1});
   }
   UpdatePanierPlus()async{
     await clientCollection.doc(uid).get().then((value) => nbrPanier=value.get("panier").toInt());
@@ -139,10 +140,25 @@ updatUserdata(){
     await clientCollection.doc(this.uid).collection("Panier").doc(uid).update({"quentite":nbPlat+1});
   }
   UpdatePlatMoin(String uid)async{
-    print("hello "+uid);
+
     await clientCollection.doc(this.uid).collection("Panier").doc(uid).get().then((value) => nbPlat=value.get("quentite").toInt());
 
     await clientCollection.doc(this.uid).collection("Panier").doc(uid).update({"quentite":nbPlat-1});
+  }
+  writeCommande(Location l)async{
+    var dt = DateTime.now();
+    String time;
+    if (dt.hour<10 && dt.minute<10)
+    { time = "0"+dt.hour.toString()+":0"+dt.minute.toString();}else
+    if (dt.hour<10){
+      time = "0"+dt.hour.toString()+"0"+dt.minute.toString();
+    }else
+    if (dt.minute<10){ time = dt.hour.toString()+":0"+dt.minute.toString();}else
+    { time = dt.hour.toString()+":"+dt.minute.toString();};
+    for(int i =0;i<list!.length;i++){
+
+      await  FirebaseFirestore.instance.collection('Commandes').doc(uid+":"+time.toString()).set({"nom":list![i].nom,"description":list![i].descreption,"prix":list![i].prix,"ID":list![i].id,"ResId":list![i].resId,"categorie":list![i].categore,"quentite":list![i].quantite.toInt(),"message":list![i].message,"UserID":uid,"Latitude":l.latitude,"Longitude":l.longitude});
+    }
   }
 }
 

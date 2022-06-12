@@ -1,10 +1,11 @@
-
+import 'dart:async';
 import 'package:clientapp/restaurant/restaurant.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RestauService {
-static String plasImage ="https://firebasestorage.googleapis.com/v0/b/projet-8522f.appspot.com/o/Categories%2Fplat%2Fpizzap.png?alt=media&token=1a6c59b8-ba67-4c54-b2a8-c0a2abdcf8bb",foodImage="https://firebasestorage.googleapis.com/v0/b/projet-8522f.appspot.com/o/Categories%2Fplat%2Fpizzap.png?alt=media&token=1a6c59b8-ba67-4c54-b2a8-c0a2abdcf8bb",name="";
-  final CollectionReference restauCollection = FirebaseFirestore.instance.collection('Restaurant');
+
+static String plasImage ="",foodImage="",name="";
+final CollectionReference restauCollection = FirebaseFirestore.instance.collection('Restaurant');
   
   List <String> _sugestion(QuerySnapshot snapshot ){
 
@@ -68,8 +69,6 @@ static String plasImage ="https://firebasestorage.googleapis.com/v0/b/projet-852
 
     return snapshot.docs.map((doc)
     {
-var t=doc.get("description").toString();
-    print(t);
       return Plat(id: doc.get("ID").toString(), nom:doc.get("nom").toString(), resId: doc.get("ResID").toString(), descreption: doc.get("description").toString(), prix: doc.get("prix").toInt(), categore: doc.get("categorie").toString());
 
 
@@ -95,16 +94,35 @@ var t=doc.get("description").toString();
 
     return restauCollection.doc(id).snapshots().map((snapshot) => _tabcate(snapshot));
   }
-String getfoodImage(String cate){
-  FirebaseFirestore.instance.collection('Categories').doc(cate).get().then((value) => foodImage=value.get("foodImage"));
+ getfoodImage(String cate)  {
 
 
-  return foodImage;
+ if(cate=="Pizzas"){
+   foodImage="images/pizza.png";
+
+ }
+ else if(cate=="Burger"){
+   foodImage="images/burger.png";
+ }else if(cate=="Tacos"){
+   foodImage="images/tacos.png";
+ }else{
+   foodImage="images/chicken.png";
+ }
 }
-String getplatImage(String cate){
- FirebaseFirestore.instance.collection('Categories').doc(cate).get().then((value) => plasImage=value.get("platImage"));
+ getplatImage(String cate)  {
 
-  return plasImage;
+if(cate=="Pizzas"){
+  plasImage="images/pizzap.png";
+
+}
+else if(cate=="Burger"){
+  plasImage="images/burgerp.png";
+}else if(cate=="Tacos"){
+  plasImage="images/chickenp.png";
+}else {
+  plasImage="images/chickenp.png";
+}
+
 }
 
 String nom(String id){

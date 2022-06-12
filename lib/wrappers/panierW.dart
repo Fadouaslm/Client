@@ -17,7 +17,7 @@ class PanierW extends StatelessWidget {
   return StreamBuilder<int>(
     stream: DatabaseService(uid: user!.uid).existpanier,
     builder: (context, snapshot) {
-      print(snapshot.data);
+
       if (snapshot.hasData){
         if (snapshot.data==0){
 

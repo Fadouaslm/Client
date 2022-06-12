@@ -3,9 +3,12 @@ import 'package:clientapp/restaurant/restaurant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'Food.dart';
 import 'Page.dart';
+import 'auth/user.dart';
 import 'classe1.dart';
+import 'database/database.dart';
 
 
 class Catego extends StatefulWidget {
@@ -20,19 +23,26 @@ class _CategoState extends State<Catego> {
   String plasImage="";
   String foodImage="";
   List<Plat> plats=[];
+  getImage()async{
+    await RestauService().getplatImage(widget.categorie) ;
+    await RestauService().getfoodImage(widget.categorie);
+  }
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<MyUser?>(context);
 
-    plasImage=RestauService().getplatImage(widget.categorie) ;
-    foodImage=RestauService().getfoodImage(widget.categorie);
-
+getImage();
+foodImage=RestauService.foodImage;
+plasImage=RestauService.plasImage;
     return   StreamBuilder<List<Plat>>(
       stream: RestauService().categoreList(widget.restaurant_id, widget.categorie),
       builder: (context, snapshot) {
 
         if (snapshot.hasData){
           plats =snapshot.data!;
-          foodImage=RestauService().getfoodImage(widget.categorie);
+          getImage();
+          foodImage=RestauService.foodImage;
+          plasImage=RestauService.plasImage;
           print(foodImage);
 return ListView.builder(
     physics: BouncingScrollPhysics(),
@@ -43,8 +53,11 @@ return ListView.builder(
       final int prix = plats[index].prix;
 
 
+
       return GestureDetector(
-        onTap: () {
+        onTap: () async{
+
+        var t= await DatabaseService(uid: user!.uid).existPlat(plats[index]);
           Classe1.classe=Food(plat: plats[index],);
 
           Navigator.push(
@@ -184,7 +197,7 @@ return ListView.builder(
                   width: 110.w,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: NetworkImage(plasImage),
+                      image: AssetImage(plasImage),
                     ),
                   ),
                 ),
@@ -195,7 +208,7 @@ return ListView.builder(
                   width: 100.w,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: NetworkImage(foodImage),
+                      image: AssetImage(foodImage),
                     ),
                   ),
                 ),

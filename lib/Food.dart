@@ -10,9 +10,9 @@ import 'package:clientapp/Home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'Panier.dart';
 import 'auth/user.dart';
 import 'database/database.dart';
+import 'database/restdata.dart';
 
 
 
@@ -26,7 +26,9 @@ class Food extends StatefulWidget {
 
 class _FoodState extends State<Food> {
   String text="";
-  bool value = false;
+  String foodImage="";
+  String platImage="";
+  bool value=DatabaseService.exist;
   bool isPressed = false;
   int _counter = 1;
   num prixUnitaire = 250;
@@ -54,24 +56,28 @@ class _FoodState extends State<Food> {
       _counter > 1 ? _counter-- : print('bzf eelik');
     });
   }
-
+  getImage(){
+    RestauService().getplatImage(widget.plat.categore) ;
+   RestauService().getfoodImage(widget.plat.categore);
+  }
   @override
   Widget build(BuildContext context) {
 
     final user = Provider.of<MyUser?>(context);
-
-if (o==0){
-
-
-  if(DatabaseService(uid:user!.uid).existPlat(widget.plat)){
-    isPressed=true;
-  }else{isPressed=false;}
+if(o==0) {
+  isPressed = DatabaseService.exist;
 }
-
-
     foodName=widget.plat.nom;
     prixUnitaire=widget.plat.prix;
     description=widget.plat.descreption;
+    setState(() {
+      getImage();
+      foodImage= RestauService.foodImage;
+      platImage=RestauService.plasImage;
+      print(foodImage);
+    });
+;
+
 
 
     return SafeArea(
@@ -131,8 +137,7 @@ if (o==0){
                             DatabaseService(uid: user!.uid).deletFavoris(widget.plat);
                             isPressed = false;
                             o++;
-                            print("hooo");
-                            print(o);
+
                            DatabaseService(uid: user.uid).UpdateFavorisMoin();
                         }});
                       },
@@ -200,7 +205,7 @@ if (o==0){
                               )
                             ],
                             image: DecorationImage(
-                                image: AssetImage("images/burgerp.png"),
+                                image: AssetImage(platImage),
                                 fit: BoxFit.cover),
                           ),
                         ),
@@ -211,7 +216,7 @@ if (o==0){
                           width: 110.w,
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: AssetImage("images/burger.png"),
+                              image: AssetImage(foodImage),
                               fit: BoxFit.cover,
                             ),
                           ),

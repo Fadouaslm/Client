@@ -1,6 +1,7 @@
 import 'package:clientapp/client/panier.dart';
 import 'package:clientapp/database/database.dart';
 import 'package:clientapp/database/restdata.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -42,17 +43,28 @@ class _PanierPleineState extends State<PanierPleine> {
     super.initState();
   }
   double height = 0 ;
+  getImage(Panier plat){
+    RestauService().getplatImage(plat.categore) ;
+     RestauService().getfoodImage(plat.categore);
+  }
   @override
   Widget build(BuildContext context) {
-    // plat.add({ 'Nom': '${widget.nom_plat}' , 'Prix': '${widget.Prix}' , 'PicP' : '${widget.platPic}' , 'Pic' :'${widget.Pic}'  ,'counter' : '${widget.counter}' }) ;
+
     total = prixinitiale() ;
+
     final user = Provider.of<MyUser?>(context);
     return StreamBuilder<List<Panier>>(
       stream: DatabaseService(uid: user!.uid).panier,
       builder: (context, snapshot) {
+        String foodImage="";
+        String platImage="";
         if (snapshot.hasData){
 
           plat=snapshot.data!;
+          DatabaseService.list=snapshot.data;
+          prixtotal=0;
+
+
         }
         return SafeArea(child:
         Scaffold(
@@ -92,13 +104,18 @@ class _PanierPleineState extends State<PanierPleine> {
                       controller: controller,
                       itemCount: plat == null ? 0 :plat.length ,
                       itemBuilder:(BuildContext context, int index) {
-                        String foodImage=RestauService().getfoodImage(plat[index].categore);
-                        String platImage=RestauService().getplatImage(plat[index].categore);
+
+                        getImage(plat[index]);
+                        foodImage= RestauService.foodImage;
+                        platImage=RestauService.plasImage;
                         double prix = double.parse("${plat[index].prix}" ) ;
+
+                        prixtotal=prixtotal+plat[index].prix;
                         String cnt ;
                         "${plat[index].quantite}".length == 1 ?
                         cnt = "${plat[index].quantite}".substring(0 , 1) : cnt = "${plat[index].quantite}".substring(0 , 2) ;
                         int  counter = int.parse(cnt )  ;
+                        print(foodImage);
                         return Row(
                           children: [
                             SizedBox(width: 10.h,) ,
@@ -126,7 +143,7 @@ class _PanierPleineState extends State<PanierPleine> {
                                                     width: 110.w,
                                                     decoration: BoxDecoration(
                                                       image: DecorationImage(
-                                                          image: NetworkImage(platImage),
+                                                          image: AssetImage(platImage),
                                                           fit: BoxFit.cover
                                                       ),
                                                     ),
@@ -138,7 +155,7 @@ class _PanierPleineState extends State<PanierPleine> {
                                                     width: 105.w,
                                                     decoration: BoxDecoration(
                                                       image: DecorationImage(
-                                                          image: NetworkImage(foodImage),
+                                                          image: AssetImage(foodImage),
                                                           fit: BoxFit.cover
                                                       ),
                                                     ),
@@ -183,6 +200,7 @@ class _PanierPleineState extends State<PanierPleine> {
                                                   SizedBox.fromSize(
                                                     size: Size.fromRadius(15),
                                                     child: FloatingActionButton(
+                                                      heroTag: "mino",
                                                       onPressed:  ( ) {
                                                         {
                                                           setState(() {
