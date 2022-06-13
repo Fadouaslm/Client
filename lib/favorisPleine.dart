@@ -83,7 +83,7 @@ class _FavorisPleineState extends State<FavorisPleine> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>Food(plat: plat[index])));/////////////////////////////////////////////////////////
+                                  builder: (context) =>Food(plat: plat[index])));
                         },
                         child: Column(
                           children: [

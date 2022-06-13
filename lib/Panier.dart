@@ -62,8 +62,10 @@ class _PanierState extends State<Panier> {
             height: 60.h,
             child: ElevatedButton(
               onPressed: () {
+                Classe1.classe=Home();
+                Main_Page.currentindex=0;
                 Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Home()));
+                    context, MaterialPageRoute(builder: (context) => Main_Page()));
               },
               child: AutoSizeText(
                 'Découvrir !',

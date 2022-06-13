@@ -1,10 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:clientapp/Page.dart';
+import 'package:clientapp/Search.dart';
 import 'package:clientapp/classe1.dart';
 import 'package:clientapp/database/database.dart';
 import 'package:clientapp/database/restdata.dart';
 import 'package:clientapp/pageRestau.dart';
+import 'package:clientapp/restaurant/restaurant.dart';
+import 'package:clientapp/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -22,8 +25,9 @@ class _HomeState extends State<Home> {
   String User = '';
   int activeIndex=0;
   int activeIndex2=0;
+  String texet="";
   var Urlimages=[
-
+   
     'https://firebasestorage.googleapis.com/v0/b/projet-8522f.appspot.com/o/Promotion%2Foussss.png?alt=media&token=ae9f7052-0571-45be-ba73-57d3ad787e8f',
   ];
   var UrlRestaurants=[
@@ -33,6 +37,13 @@ class _HomeState extends State<Home> {
 
   Widget build(BuildContext context) {
     final user = Provider.of<MyUser?>(context);
+if(user==null){
+  Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>Wrapper()));
+
+}
     User=DatabaseService(uid:user!.uid).gatNom();
     return SafeArea(
         child: Scaffold(
@@ -83,44 +94,63 @@ class _HomeState extends State<Home> {
                   SizedBox(
                     height: 28.h,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 330.w,
-                        height: 45.h,
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          border: Border.all(
-                            color: Color(0xffF54749),
-                            width: 1.5.w,
-                          ),
-                          borderRadius: BorderRadius.circular(10.r),
-                        ),
-                        child: TextFormField(
-                          textAlign: TextAlign.left,
-                          decoration: InputDecoration(
-                            prefixIcon: Icon(
-                              Icons.search,
-                              color: Color(0xffF54749),
+                  StreamBuilder<List<Restaurant>>(
+                    stream: RestauService().restaurantList,
+                    builder: (context, snapshot) {
+                      List<Restaurant> list=[];
+                      if (snapshot.hasData){
+                       list=snapshot.data!;
+                      }
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 330.w,
+                            height: 45.h,
+                            decoration: BoxDecoration(
+                              color: Colors.transparent,
+                              border: Border.all(
+                                color: Color(0xffF54749),
+                                width: 1.5.w,
+                              ),
+                              borderRadius: BorderRadius.circular(10.r),
                             ),
-                            contentPadding: EdgeInsets.all(10.0.h),
-                            border: InputBorder.none,
-                            hintText:'Recherche...',
-                            hintStyle: TextStyle(
-                              color: Color(0xffa7a7a7),
-                              fontSize: 13.sp,
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.bold,
+                            child: TextFormField(
+                              onChanged: (value){
+                                texet=value;
+                              },
+                              onTap: (){
+                                List<Restaurant>l=sugestion(list, texet);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>Search(list: l)));
+                              },
+                              textAlign: TextAlign.left,
+                              decoration: InputDecoration(
+                                prefixIcon: Icon(
+                                  Icons.search,
+                                  color: Color(0xffF54749),
+                                ),
+                                contentPadding: EdgeInsets.all(10.0.h),
+                                border: InputBorder.none,
+                                hintText:'Recherche...',
+                                hintStyle: TextStyle(
+                                  color: Color(0xffa7a7a7),
+                                  fontSize: 13.sp,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                filled: true,
+                                fillColor: Colors.transparent,
+                                isCollapsed: true,
+                              ),
+                              textInputAction: TextInputAction.done,
                             ),
-                            filled: true,
-                            fillColor: Colors.transparent,
-                            isCollapsed: true,
                           ),
-                          textInputAction: TextInputAction.done,
-                        ),
-                      ),
-                    ],
+                        ],
+                      );
+                    }
                   ),
                 ],
               )
@@ -128,11 +158,11 @@ class _HomeState extends State<Home> {
         ),
                SizedBox(height: 20.h,),
                   Center(
-                    child: StreamBuilder<List<String>?>(
+                    child: StreamBuilder<List<String>>(
                       stream: RestauService().promotion,
                       builder: (context, snapshot) {
                         if(snapshot.hasData){
-
+                         Urlimages.add("https://firebasestorage.googleapis.com/v0/b/projet-8522f.appspot.com/o/Promotion%2Foussss.png?alt=media&token=ae9f7052-0571-45be-ba73-57d3ad787e8f");
                           Urlimages=snapshot.data!;
                         }
                         return Column(
@@ -140,6 +170,7 @@ class _HomeState extends State<Home> {
                             CarouselSlider.builder(
                                 itemCount: Urlimages.length,
                                 itemBuilder:(context,index,realIndex){
+                                  print(Urlimages);
                                   String urlImage=Urlimages[index];
                                   return buildImage(urlImage, index);
                                   } ,
@@ -288,4 +319,14 @@ class _HomeState extends State<Home> {
       dotColor: Color(0xffCCCCCC),
     ),
   );
+  List<Restaurant> sugestion(List<Restaurant> list,String s){
+    List<Restaurant> l=[];
+    for(int i=0;i<list.length;i++){
+      if (list[i].nom.contains(s)){
+        l.add(list[i]);
+      }
+
+    }
+    return l;
+  }
 }

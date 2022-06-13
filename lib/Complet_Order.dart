@@ -208,8 +208,9 @@ DatabaseService.lat=position.latitude;
                    await DatabaseService(uid: user!.uid).writeCommande(location);
 
                         for(int i =0;i<list!.length;i++){
-                        await  DatabaseService(uid: user.uid).deletePanier(list[i]);}
-                       await DatabaseService(uid: user.uid).UpdatePanierMoin();
+                        await  DatabaseService(uid: user.uid).deletePanier(list[i]);
+                        await DatabaseService(uid: user.uid).UpdatePanierMoin();}
+
                         Navigator.push(
                         context,
                         MaterialPageRoute(

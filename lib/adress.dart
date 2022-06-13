@@ -131,8 +131,9 @@ class _AdressState extends State<Adress> {
                      await DatabaseService(uid: user!.uid).writeCommande(locations[0]);
 
                      for(int i =0;i<list!.length;i++){
-                      await DatabaseService(uid: user.uid).deletePanier(list[i]);}
-                     await DatabaseService(uid: user.uid).UpdatePanierMoin();
+                      await DatabaseService(uid: user.uid).deletePanier(list[i]);
+                      await DatabaseService(uid: user.uid).UpdatePanierMoin();}
+
                       Navigator.push(
                           context,
                           MaterialPageRoute(
