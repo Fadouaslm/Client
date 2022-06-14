@@ -54,7 +54,7 @@ return Panier(id: doc.get("ID").toString(), nom: doc.get("nom").toString(), resI
 updatUserdata(){
     clientCollection.doc(uid).get().then((value) {
       if(!value.exists){
-        clientCollection.doc(uid).set({"nom":"new user" , "panier":0.toInt(),"favoris":0.toInt()});
+        clientCollection.doc(uid).set({"nom":"new user" , "panier":0.toInt(),"favoris":0.toInt(),"existCommande":false});
       }
     });
 }
@@ -160,6 +160,20 @@ return exist;
 
       await  FirebaseFirestore.instance.collection('Commandes').doc(uid+":"+time.toString()).collection("commade").add({"nom":list![i].nom,"description":list![i].descreption,"prix":list![i].prix,"ID":list![i].id,"ResId":list![i].resId,"categorie":list![i].categore,"quentite":list![i].quantite.toInt(),"message":list![i].message,"UserID":uid,"Latitude":l.latitude,"Longitude":l.longitude});
     }
+
+  }
+ bool _existCommande(DocumentSnapshot snapshot){
+    return  snapshot.get("existCommande");
+  }
+
+  Stream <bool> get existCommande{
+
+    return clientCollection.doc(uid).snapshots().map((snapshot) => _existCommande(snapshot));
+  }
+  UpdateExistCommande()async{
+
+
+    await clientCollection.doc(uid).update({"existCommande":false});
   }
 }
 

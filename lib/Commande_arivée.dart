@@ -2,9 +2,13 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:clientapp/Home.dart';
 import 'package:clientapp/Page.dart';
 import 'package:clientapp/classe1.dart';
+import 'package:clientapp/database/database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+
+import 'auth/user.dart';
 
 class Commandearive extends StatefulWidget {
   const Commandearive({Key? key}) : super(key: key);
@@ -16,6 +20,7 @@ class Commandearive extends StatefulWidget {
 class _CommandeariveState extends State<Commandearive> {
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<MyUser?>(context);
     return
       SafeArea(
           child: Scaffold(
@@ -56,11 +61,8 @@ Veuillez la collecter''',
                   width: 200.w,
                   height: 70.h,
                   child: ElevatedButton(
-                    onPressed: () {
-                      Classe1.classe=Home();
-                      Main_Page.currentindex=0;
-                      Navigator.push(
-                          context, MaterialPageRoute(builder: (context) => Main_Page()));
+                    onPressed: ()async {
+                     await DatabaseService(uid: user!.uid).UpdateExistCommande();
                     },
                     child: AutoSizeText(
                       "C'est parti",
