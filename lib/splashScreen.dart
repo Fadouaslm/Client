@@ -1,6 +1,6 @@
+import 'package:clientapp/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:clientapp/Onboarding.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -15,7 +15,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(
         Duration(milliseconds: 6000),
             () => Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => OnBoarding()
+            context, MaterialPageRoute(builder: (context) => Wrapper()
             )
             )
     );

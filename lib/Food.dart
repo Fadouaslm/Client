@@ -1,31 +1,41 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:clientapp/Page.dart';
+import 'package:clientapp/classe1.dart';
+import 'package:clientapp/classe2.dart';
 import 'package:clientapp/my_flutter_app_icons.dart';
+import 'package:clientapp/restaurant/restaurant.dart';
+import 'package:clientapp/wrappers/panierW.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:clientapp/Home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:clientapp/Favoris.dart';
-import 'package:clientapp/Profile.dart';
-import 'package:clientapp/Panier.dart';
+import 'package:provider/provider.dart';
+import 'auth/user.dart';
+import 'database/database.dart';
+import 'database/restdata.dart';
+
+
 
 class Food extends StatefulWidget {
-  const Food({Key? key}) : super(key: key);
+  final Plat plat;
+
+  const Food({Key? key,required this.plat}) : super(key: key);
   @override
   _FoodState createState() => _FoodState();
 }
 
 class _FoodState extends State<Food> {
-  List interfaces = [Home(), Panier(), Favoris(), Profile()];
-  int currentindex = 0;
-  bool value = false;
+  String text="";
+  String foodImage="";
+  String platImage="";
+  bool value=DatabaseService.exist;
   bool isPressed = false;
-  num _counter = 1;
+  int _counter = 1;
   num prixUnitaire = 250;
-  var foodName = 'Burger';
-  var description1 = 'tomate';
-  var description2 = 'salade';
-  var description3 = 'fromage';
-  var description5 = 'VH';
+  var foodName = '';
+  var description = '';
+  int o=0;
+
   num prixTotal(num prixUnitaire) {
     return prixUnitaire * _counter;
   }
@@ -37,6 +47,7 @@ class _FoodState extends State<Food> {
   }
 
   bool getInitial() {
+
     return isPressed;
   }
 
@@ -45,43 +56,39 @@ class _FoodState extends State<Food> {
       _counter > 1 ? _counter-- : print('bzf eelik');
     });
   }
-
+  getImage(){
+    RestauService().getplatImage(widget.plat.categore) ;
+   RestauService().getfoodImage(widget.plat.categore);
+  }
   @override
   Widget build(BuildContext context) {
+
+    final user = Provider.of<MyUser?>(context);
+if(o==0) {
+  isPressed = DatabaseService.exist;
+}
+    foodName=widget.plat.nom;
+    prixUnitaire=widget.plat.prix;
+    description=widget.plat.descreption;
+    setState(() {
+      getImage();
+      foodImage= RestauService.foodImage;
+      platImage=RestauService.plasImage;
+      print(foodImage);
+    });
+;
+
+
+
     return SafeArea(
         child: Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        onTap: (int index) {
-          setState(() {
-            currentindex = index;
-          });
-        },
-        currentIndex: currentindex,
-        selectedItemColor: Color(0xfff54749).withOpacity(0.7),
-        unselectedItemColor: Colors.black,
-        elevation: 0,
-        items: [
-          BottomNavigationBarItem(
-              icon: Icon(MyFlutterApp.home), label: 'Accueil'),
-          BottomNavigationBarItem(
-              icon: Icon(MyFlutterApp.cart), label: 'Panier'),
-          BottomNavigationBarItem(
-            icon: Icon(MyFlutterApp.heart),
-            label: 'Favoris',
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(
-                MyFlutterApp.user,
-              ),
-              label: 'Profil'),
-        ],
-      ),
+
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         child: Column(
           children: [
             GestureDetector(
+
               onTap: () {
                 Navigator.pop(context);
               },
@@ -116,13 +123,23 @@ class _FoodState extends State<Food> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        setState(() {
+                        setState((){
                           if (isPressed == false) {
-                            isPressed = getInitial();
+                            //isPressed = getInitial();
+                            DatabaseService(uid: user!.uid).updateFavoris(widget.plat);
                             isPressed = true;
-                          } else
+
+
+                            o++;
+
+                           DatabaseService(uid: user.uid).UpdateFavorisPlus();
+                          } else{
+                            DatabaseService(uid: user!.uid).deletFavoris(widget.plat);
                             isPressed = false;
-                        });
+                            o++;
+
+                           DatabaseService(uid: user.uid).UpdateFavorisMoin();
+                        }});
                       },
                       child: Icon(
                         isPressed
@@ -188,7 +205,7 @@ class _FoodState extends State<Food> {
                               )
                             ],
                             image: DecorationImage(
-                                image: AssetImage("images/burgerp.png"),
+                                image: AssetImage(platImage),
                                 fit: BoxFit.cover),
                           ),
                         ),
@@ -199,7 +216,7 @@ class _FoodState extends State<Food> {
                           width: 110.w,
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: AssetImage("images/burger.png"),
+                              image: AssetImage(foodImage),
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -234,7 +251,7 @@ class _FoodState extends State<Food> {
                           Padding(
                             padding: EdgeInsets.only(left: 7),
                             child: AutoSizeText(
-                              '($description1, $description2, $description3, $description5,)',
+                              description,
                               maxLines: 3,
                               style: TextStyle(
                                   fontSize: 15.sp,
@@ -299,6 +316,7 @@ class _FoodState extends State<Food> {
                               SizedBox.fromSize(
                                 size: Size.fromRadius(15),
                                 child: FloatingActionButton(
+                                  heroTag: "bottom1",
                                   onPressed: _decrementCounter,
                                   child:
                                       Icon(Icons.remove, color: Color(0xffF54749)),
@@ -320,6 +338,7 @@ class _FoodState extends State<Food> {
                               SizedBox.fromSize(
                                 size: Size.fromRadius(15),
                                 child: FloatingActionButton(
+                                  heroTag: "bottom two",
                                   onPressed: _incrementCounter,
                                   child: Icon(Icons.add, color: Color(0xffF54749)),
                                   backgroundColor: Colors.white,
@@ -438,8 +457,15 @@ class _FoodState extends State<Food> {
               height: 60.h,
               child: ElevatedButton(
                 onPressed: () {
+                  Classe2.classe=PanierW();
+                  Classe1.classe=Home();
+                  Main_Page.currentindex=1;
+
+                  DatabaseService(uid: user!.uid).updatePanier(widget.plat, _counter, text);
+                  DatabaseService(uid: user.uid).UpdatePanierPlus();
                   Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => Home()));
+                      context, MaterialPageRoute(builder: (context) => Main_Page()));
+
                 },
                 child: AutoSizeText(
                   'Ajouter au panier',
@@ -491,6 +517,9 @@ class _FoodState extends State<Food> {
               borderRadius: BorderRadius.circular(12.r),
             ),
             child: TextFormField(
+              onChanged: (value){
+                text=value;
+              },
               minLines: 1,
               maxLines: 5,
               keyboardType: TextInputType.multiline,

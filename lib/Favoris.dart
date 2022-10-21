@@ -1,3 +1,6 @@
+import 'package:clientapp/Home.dart';
+import 'package:clientapp/Page.dart';
+import 'package:clientapp/classe1.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:clientapp/Food.dart';
@@ -60,8 +63,10 @@ class _FavorisState extends State<Favoris> {
             height: 60.h,
             child: ElevatedButton(
               onPressed: () {
+                Classe1.classe=Home();
+                Main_Page.currentindex=0;
                 Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Food()));
+                    context, MaterialPageRoute(builder: (context) => Main_Page()));////////////////////////////////////////
               },
               child: AutoSizeText(
                 'Découvrir !',

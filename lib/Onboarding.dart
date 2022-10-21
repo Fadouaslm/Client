@@ -10,6 +10,8 @@ import '../widgets/slidedots.dart';
 import 'dart:async';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'auth/auth.dart';
+
 class OnBoarding extends StatefulWidget {
   @override
   _onBoarding createState() => _onBoarding();
@@ -108,7 +110,7 @@ class _onBoarding extends State<OnBoarding> {
                          height: 60.h,
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.push(
+                            Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => Login()));
@@ -153,7 +155,8 @@ class _onBoarding extends State<OnBoarding> {
                             ),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30.r))),
-                        onPressed: () {
+                        onPressed: () async{
+                          await AuthService().signeInAnon();
                           Navigator.push(
                               context,
                               MaterialPageRoute(
